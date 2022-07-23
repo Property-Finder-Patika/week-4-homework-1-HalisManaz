@@ -3,9 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
-	mathFunction "fundamentals/ch07/math"
+	mathFunction "github.com/kaldiroglu/Fundamentals-of-Go/ch07/math"
 	"math"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -22,12 +23,24 @@ func (c *Calculator) addMathFunction(m mathFunction.MathFunction) {
 func (c *Calculator) doCalculation(name string, arg float64) (float64, error) {
 	var result float64
 	for _, f := range c.functions {
-		if strings.ToLower(name) == strings.ToLower(f.GetName()) {
+		if strings.ToUpper(name) == strings.ToUpper(f.GetName()) {
 			result = f.Calculate(arg)
 			return result, nil
 		}
 	}
-	return 0, errors.New("no such function exists:" + name)
+	return 0, errors.New("invalid number argument:" + strconv.FormatFloat(arg, 'E', -1, 64))
+}
+
+func (c *Calculator) checkValidFunction(name string) error {
+	for _, f := range c.functions {
+		if strings.ToUpper(name) == strings.ToUpper("x") {
+			fmt.Println("Bye!")
+			os.Exit(0)
+		} else if strings.ToUpper(name) == strings.ToUpper(f.GetName()) {
+			return nil
+		}
+	}
+	return errors.New("invalid function name:" + name)
 }
 
 func main() {
@@ -102,10 +115,16 @@ func startCalculator() {
 		var fName string
 		var arg float64
 		fmt.Println("> Enter name of the calculation or enter x to exit:")
-		_, err := fmt.Scanf("%s", &fName)
+		_, err := fmt.Scanln(&fName)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
+		}
+		err = myCalculator.checkValidFunction(fName)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println()
+			continue
 		}
 		//
 		if fName == "x" {
@@ -113,7 +132,7 @@ func startCalculator() {
 			flag = false
 		} else {
 			fmt.Println("> Enter a value for the calculation:")
-			_, err := fmt.Scanf("%f", &arg)
+			_, err := fmt.Scanln(&arg)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(0)
@@ -123,6 +142,7 @@ func startCalculator() {
 				fmt.Println(err)
 			} else {
 				fmt.Printf("Result of %s of %f : %f\n", fName, arg, value)
+				fmt.Println()
 			}
 		}
 	}
