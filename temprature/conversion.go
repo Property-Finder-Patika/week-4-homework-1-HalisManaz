@@ -3,7 +3,9 @@ package main
 import "errors"
 
 type Conversion interface {
+	// Convert temprature with one unit to another
 	Convert(number float64, unit string) (float64, error)
+	// GetUnit get actual unit of temprature
 	GetUnit() string
 }
 
