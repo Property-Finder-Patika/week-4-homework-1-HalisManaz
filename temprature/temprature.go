@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"temprature/conversion"
 )
 
 func main() {
@@ -13,11 +14,11 @@ func main() {
 }
 
 type Temperature struct {
-	units []Conversion
+	units []conversion.Conversion
 }
 
 // Add all units to slice
-func (t *Temperature) addTemperatureUnit(n Conversion) {
+func (t *Temperature) addTemperatureUnit(n conversion.Conversion) {
 	t.units = append(t.units, n)
 }
 
@@ -38,9 +39,9 @@ func (t *Temperature) conversion(value float64, unit, goalUnit string) (float64,
 func startConversion() {
 	// Create empty struct and add all units
 	temperatureConverter := Temperature{}
-	temperatureConverter.addTemperatureUnit(Celsius{"C"})
-	temperatureConverter.addTemperatureUnit(Fahrenheit{"F"})
-	temperatureConverter.addTemperatureUnit(Kelvin{"K"})
+	temperatureConverter.addTemperatureUnit(conversion.Celsius{"C"})
+	temperatureConverter.addTemperatureUnit(conversion.Fahrenheit{"F"})
+	temperatureConverter.addTemperatureUnit(conversion.Kelvin{"K"})
 
 	fmt.Println("\nTemprature converter started.")
 	for {
